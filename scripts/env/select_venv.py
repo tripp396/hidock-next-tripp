@@ -57,11 +57,17 @@ def existing_venv_version(path: Path):
     return None
 
 
+def venv_is_valid(path: Path) -> bool:
+    if not venv_python(path).exists():
+        return False
+    version = existing_venv_version(path)
+    return version is not None and version >= MIN_PYTHON
+
+
 def ensure(path: Path) -> None:
-    if venv_python(path).exists():
-        version = existing_venv_version(path)
-        if version is not None and version >= MIN_PYTHON:
-            return
+    if venv_is_valid(path):
+        return
+    if path.exists():
         # Existing venv predates the MIN_PYTHON requirement (or its version
         # can't be determined) - rebuild it with the current interpreter.
         shutil.rmtree(path)
@@ -85,7 +91,7 @@ def main() -> int:
             print(f"ERROR: failed to create venv at {path}: {exc}", file=sys.stderr)
             return 1
 
-    if args.do_print and venv_python(path).exists():
+    if args.do_print and venv_is_valid(path):
         print(str(path))
 
     return 0
