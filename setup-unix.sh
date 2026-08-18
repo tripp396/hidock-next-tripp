@@ -119,10 +119,10 @@ cd apps/desktop || {
 }
 
 echo "Resolving per-platform virtual environment (selector)..."
-VENV_PATH=$(python scripts/env/select_venv.py --print 2>/dev/null || true)
+VENV_PATH=$(python ../../scripts/env/select_venv.py --print 2>/dev/null || true)
 if [ -z "$VENV_PATH" ]; then
   echo "Creating/ensuring environment..."
-  VENV_PATH=$(python scripts/env/select_venv.py --ensure --print 2>/dev/null || true)
+  VENV_PATH=$(python ../../scripts/env/select_venv.py --ensure --print 2>/dev/null || true)
 fi
 
 if [ -z "$VENV_PATH" ]; then
@@ -133,7 +133,7 @@ fi
 
 if [ ! -d "$VENV_PATH" ]; then
   echo "Environment directory missing, creating..."
-  python scripts/env/select_venv.py --ensure || {
+  python ../../scripts/env/select_venv.py --ensure || {
     echo "❌ Environment creation failed"; exit 1; }
 fi
 
@@ -141,7 +141,7 @@ echo "Using environment: $VENV_PATH"
 if [ ! -f "$VENV_PATH/bin/python" ]; then
   echo "❌ python executable missing inside venv (corrupted). Recreating..."
   rm -rf "$VENV_PATH"
-  python scripts/env/select_venv.py --ensure || { echo "❌ Recreate failed"; exit 1; }
+  python ../../scripts/env/select_venv.py --ensure || { echo "❌ Recreate failed"; exit 1; }
 fi
 
 echo "Upgrading pip and build tooling..."
