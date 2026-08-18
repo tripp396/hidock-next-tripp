@@ -148,7 +148,7 @@ echo "Upgrading pip and build tooling..."
 "$VENV_PATH/bin/python" -m pip install --upgrade pip setuptools wheel || echo "⚠️  pip upgrade failed (continuing)"
 
 echo "Installing desktop dependencies (editable, dev extras)..."
-"$VENV_PATH/bin/python" -m pip install -e "apps/desktop[dev]" || {
+"$VENV_PATH/bin/python" -m pip install -e ".[dev]" || {
   echo "❌ Failed to install desktop dependencies"; exit 1; }
 
 echo "✅ Desktop app setup complete!"
