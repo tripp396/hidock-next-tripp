@@ -31,8 +31,16 @@ else
         elif command -v dnf > /dev/null 2>&1; then
             sudo dnf install -y python3.12 python3.12-pip python3.12-venv
             PYTHON_CMD="python3.12"
+        elif command -v brew > /dev/null 2>&1; then
+            brew install python@3.12
+            if command -v python3.12 > /dev/null 2>&1; then
+                PYTHON_CMD="python3.12"
+            else
+                PYTHON_CMD="$(brew --prefix python@3.12)/bin/python3.12"
+            fi
         else
             echo "❌ Cannot auto-install. Please install Python 3.12+ manually."
+            echo "   macOS without Homebrew: install Homebrew first (https://brew.sh), then re-run this script."
             exit 1
         fi
         echo "✓ Python 3.12 installed!"
@@ -59,8 +67,16 @@ if [ "$PYTHON_VER_NUM" -lt 40 ]; then
         elif command -v dnf > /dev/null 2>&1; then
             sudo dnf install -y python3.12 python3.12-pip python3.12-venv
             PYTHON_CMD="python3.12"
+        elif command -v brew > /dev/null 2>&1; then
+            brew install python@3.12
+            if command -v python3.12 > /dev/null 2>&1; then
+                PYTHON_CMD="python3.12"
+            else
+                PYTHON_CMD="$(brew --prefix python@3.12)/bin/python3.12"
+            fi
         else
             echo "❌ Cannot auto-upgrade. Please install Python 3.12+ manually."
+            echo "   macOS without Homebrew: install Homebrew first (https://brew.sh), then re-run this script."
             exit 1
         fi
         echo "✓ Python 3.12 installed!"

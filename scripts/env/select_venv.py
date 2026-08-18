@@ -12,9 +12,12 @@ Contract:
 
 import argparse
 import os
+import shutil
 import sys
 import venv
 from pathlib import Path
+
+MIN_PYTHON = (3, 10)
 
 
 def venv_dir_name() -> str:
@@ -39,9 +42,29 @@ def venv_python(path: Path) -> Path:
     return path / "bin" / "python"
 
 
+def existing_venv_version(path: Path):
+    cfg = path / "pyvenv.cfg"
+    if not cfg.exists():
+        return None
+    for line in cfg.read_text().splitlines():
+        if line.strip().startswith("version"):
+            _, _, value = line.partition("=")
+            parts = value.strip().split(".")
+            try:
+                return (int(parts[0]), int(parts[1]))
+            except (IndexError, ValueError):
+                return None
+    return None
+
+
 def ensure(path: Path) -> None:
     if venv_python(path).exists():
-        return
+        version = existing_venv_version(path)
+        if version is not None and version >= MIN_PYTHON:
+            return
+        # Existing venv predates the MIN_PYTHON requirement (or its version
+        # can't be determined) - rebuild it with the current interpreter.
+        shutil.rmtree(path)
     path.mkdir(parents=True, exist_ok=True)
     builder = venv.EnvBuilder(with_pip=True, clear=False, upgrade=False, symlinks=(os.name != "nt"))
     builder.create(str(path))
