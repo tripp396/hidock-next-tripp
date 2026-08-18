@@ -48,8 +48,8 @@ PYTHON_VERSION=$($PYTHON_CMD --version 2>&1 | cut -d' ' -f2 | cut -d'.' -f1,2)
 PYTHON_MAJOR=$(echo "$PYTHON_VERSION" | cut -d'.' -f1)
 PYTHON_MINOR=$(echo "$PYTHON_VERSION" | cut -d'.' -f2)
 PYTHON_VER_NUM=$((PYTHON_MAJOR * 10 + PYTHON_MINOR))
-if [ "$PYTHON_VER_NUM" -lt 38 ]; then
-    echo "❌ Python 3.8+ required, found $PYTHON_VERSION. Upgrading to 3.12..."
+if [ "$PYTHON_VER_NUM" -lt 40 ]; then
+    echo "❌ Python 3.10+ required (code uses 3.10 union type syntax), found $PYTHON_VERSION. Upgrading to 3.12..."
     echo "Continue? (y/N)"
     read -r response
     if case "$response" in [Yy]*) true;; *) false;; esac; then
