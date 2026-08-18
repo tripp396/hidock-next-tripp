@@ -267,7 +267,7 @@ echo "🚀 HOW TO RUN:"
 echo ""
 echo "Desktop App:"
 echo "  1. cd apps/desktop"
-echo "  2. . .venv.nix/bin/activate"
+echo "  2. . \"$VENV_PATH/bin/activate\""
 echo "  3. python main.py"
 echo ""
 
