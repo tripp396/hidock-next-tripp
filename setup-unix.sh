@@ -84,6 +84,8 @@ if [ "$PYTHON_VER_NUM" -lt 40 ]; then
         echo "Setup cancelled."
         exit 1
     fi
+    # PYTHON_CMD may have changed above; refresh the version string used later.
+    PYTHON_VERSION=$($PYTHON_CMD --version 2>&1 | cut -d' ' -f2 | cut -d'.' -f1,2)
 fi
 
 # Set up Desktop App
@@ -113,7 +115,9 @@ if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
     elif command -v brew > /dev/null; then
         # macOS
         brew install libusb
-        # tkinter comes with Python on macOS
+        # Homebrew's python@X.Y formula doesn't bundle Tcl/Tk (unlike
+        # Apple's system Python), so tkinter needs its own formula.
+        brew install "python-tk@${PYTHON_VERSION}" || echo "⚠️  Could not install python-tk@${PYTHON_VERSION}; tkinter may be unavailable"
     elif command -v pacman > /dev/null; then
         # Arch Linux
         sudo pacman -S --noconfirm \
